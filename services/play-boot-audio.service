@@ -1,0 +1,13 @@
+[Unit]
+Description=Reproducir audio al iniciar el sistema
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c '/home/emilia/arcadiax/scripts/play-boot-audio.sh'
+User=emilia
+Group=emilia
+Environment=PULSE_RUNTIME_PATH=/run/user/1000/pulse/
+
+[Install]
+WantedBy=default.target
