@@ -1,0 +1,26 @@
+image = Image("arcadiax-boot.png");
+
+# Obtener las dimensiones de la pantalla y la imagen
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+image_width = image.GetWidth();
+image_height = image.GetHeight();
+
+# Escalar la imagen para que se ajuste a la pantalla manteniendo la proporción
+scale_factor = min(screen_width / image_width, screen_height / image_height);
+
+# Redimensionar la imagen manteniendo la proporción
+image.SetWidth(image_width * scale_factor);
+image.SetHeight(image_height * scale_factor);
+
+# Calcular las posiciones para centrar la imagen redimensionada
+pos_x = Window.GetWidth()/2 - image.GetWidth()/2;
+pos_y = Window.GetHeight()/2 - image.GetHeight()/2;
+
+# Crear el sprite con la imagen escalada y ajustada
+sprite = Sprite(image);
+sprite.SetX(pos_x);
+sprite.SetY(pos_y);
+
+# Establecer la opacidad del sprite
+sprite.SetOpacity(1);

@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=arcadiax
+Description=Un tema personalizado para Plymouth
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/arcadiax
+ScriptFile=/usr/share/plymouth/themes/arcadiax/arcadiax.script
