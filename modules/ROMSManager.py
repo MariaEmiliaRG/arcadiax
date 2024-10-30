@@ -22,7 +22,8 @@ class ROMSManager:
         name, extension = os.path.splitext(fileName)
         name = re.sub(r'[\(\[].*?[\)\]]', '', name)
         name = re.sub(r'[^A-Za-z0-9 ]', ' ', name)
-        name = name '-'.join(name.split())
+        name = name.split()
+        name = "-".join(name)
         name = name.upper()
 
         return name + extension
