@@ -1,4 +1,5 @@
 import pexpect
+import time
 
 class bluetooth:
 

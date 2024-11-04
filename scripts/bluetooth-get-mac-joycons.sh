@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bluetoothctl power on
+bluetoothctl power on > /dev/null &
 bluetoothctl scan on > /dev/null &
 SCAN_PID=$!
 

@@ -6,7 +6,7 @@ import bluetooth
 class joycons:
 
     def __init__(self):
-        self.pathScriptGetMac = "../scripts/bluetooth-get-mac-joycons"
+        self.pathScriptGetMac = "../scripts/bluetooth-get-mac-joycons.sh"
         self.joyconsMac = {}
 
     def getMacJoyCons(self):
@@ -29,7 +29,7 @@ class joycons:
     def disconnectJoyCons(self):
         bt = bluetooth.bluetooth()
 
-        for joycon, mac in self.joyconsMac: 
+        for joycon, mac in self.joyconsMac.items(): 
             bt.disconnectDevice(mac)
             bt.removeDevice(mac)
         

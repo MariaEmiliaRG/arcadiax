@@ -38,6 +38,6 @@ class USBManager:
 
             devicePath = "/dev/" + device.sys_name
             self.autoMount(devicePath)
-            mountPoint = self.getMountPoint(device_path)
-            
-        return mountPoint  
+            mountPoint = self.getMountPoint(devicePath)
+            self.flag = False
+        return mountPoint
