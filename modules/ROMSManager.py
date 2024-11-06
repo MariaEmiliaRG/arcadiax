@@ -49,11 +49,26 @@ class ROMSManager:
         for fileName in os.listdir(dirPath):
             filePath = os.path.join(dirPath, fileName)
             if os.path.isfile(filePath):
-                
-                for ext in self.ROMSExtensions:
-                    if fileName.lower().endswith(ext):
+                for extensions in self.ROMSExtensions.values():
+                    if fileName.lower().endswith(tuple(extensions)):
                         ROMSFiles.append(fileName)
                         break
             
         return ROMSFiles
-        
+
+    def getROMSGroupByConsole(self):
+        ROMSFiles = {}
+
+        for fileName in os.listdir(self.ROMSDir):
+            filePath = os.path.join(self.ROMSDir, fileName)
+            
+            if os.path.isfile(filePath):
+                for console in self.ROMSExtensions:
+                    if fileName.lower().endswith(tuple(self.ROMSExtensions[console])):
+                        if console not in ROMSFiles:
+                            ROMSFiles[console] = []
+                        ROMSFiles[console].append(fileName)
+                        break  
+
+        return ROMSFiles
+
