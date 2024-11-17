@@ -1,0 +1,62 @@
+{
+    "console": {
+        "y": 70,
+        "backgroundColor": [216, 187, 255],
+        "borderColor": [216, 187, 255],
+        "borderWidth": 10,
+        "text": "CONSOLA",
+        "fontSize": "big",
+        "textColor": [53, 40, 79],
+        "selected": 1
+    },
+    "consoleOptions": {
+        "y": 145,
+        "backgroundColor": [53, 40, 79],
+        "borderColor": [216, 187, 255],
+        "borderWidth": 10,
+        "text": "consola",
+        "fontSize": "small",
+        "textColor": [216, 187, 255], 
+        "selected": 0
+    },
+    "game": {
+        "y": 290,
+        "backgroundColor": [216, 187, 255],
+        "borderColor": [216, 187, 255],
+        "borderWidth": 10,
+        "text": "VIDEOJUEGO",
+        "fontSize": "big",
+        "textColor": [53, 40, 79],
+        "selected": 0
+    },
+    "gameOptions": {
+        "y": 365,
+        "backgroundColor": [53, 40, 79],
+        "borderColor": [216, 187, 255],
+        "borderWidth": 10,
+        "text": "videojuego",
+        "fontSize": "small",
+        "textColor": [216, 187, 255],
+        "selected": 0
+    },
+    "play": {
+        "y": 510,
+        "backgroundColor": [216, 187, 255],
+        "borderColor": [216, 187, 255],
+        "borderWidth": 10,
+        "text": "JUGAR",
+        "fontSize": "big",
+        "textColor": [53, 40, 79],
+        "selected": 0
+    },
+    "controls": {
+        "y": 655,
+        "backgroundColor": [53, 40, 79],
+        "borderColor": [216, 187, 255],
+        "borderWidth": 10,
+        "text": "CONTROLES",
+        "fontSize": "big",
+        "textColor": [216, 187, 255],
+        "selected": 0
+    }
+}
