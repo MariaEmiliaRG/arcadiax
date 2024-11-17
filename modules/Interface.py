@@ -1,5 +1,6 @@
 import pygame
 import json
+import time
 
 class Interface:
     def __init__(self):
@@ -22,7 +23,6 @@ class Interface:
         with open("mainMenuButtons.json", "r") as json_file:
             self.mainMenuButtons = json.load(json_file)
 
-        #TODO Agregar la verdadera imagen de fondo
         self.imgBackground = pygame.image.load("../imgs/arcadiax-background.png")  
 
         self.imgBackground = pygame.transform.scale(self.imgBackground, (self.WIDTH, self.HEIGHT))
@@ -55,8 +55,19 @@ class Interface:
         self.screen.blit(textSurface, textRect) 
 
         return 
+    
+    def drawText(self, text, point, font, color, lineSpacing=5):
+        lines = text.splitlines()
+        x, y = point
+        for line in lines:
+            textSurface = font.render(line, True, color)
+            self.screen.blit(textSurface, (x, y))
+            y += textSurface.get_height() + lineSpacing
+
+        return
 
     def drawButton(self, button):
+
         borderColor = [255, 222, 89]  if button["selected"] else button["borderColor"]
         backgroundColor = [255, 222, 89]  if button["selected"] else button["backgroundColor"]
         
@@ -67,7 +78,7 @@ class Interface:
 
         return 
     
-    def drawMainMenuButtons(self):
+    def drawMainMenu(self):
 
         self.screen.fill(self.DARK_PURPLE) 
         self.screen.blit(self.imgBackground, (0, 0))
@@ -77,10 +88,53 @@ class Interface:
         pygame.display.flip()
         return
     
+    def drawBluetoothPairInstructions(self, imgPath):
+        self.screen.fill(self.DARK_PURPLE) 
+        self.screen.blit(self.imgBackground, (0, 0))
+        header = {
+            "y": 70,
+            "backgroundColor": self.LIGHT_PURPLE,
+            "borderColor": self.LIGHT_PURPLE,
+            "borderWidth": 10,
+            "text": "INSTRUCCIONES DE EMPAREJAMIENTO DE LOS JOY-CON",
+            "fontSize": "big",
+            "textColor": self.DARK_PURPLE,
+            "selected": 1
+        }
+
+        #TODO: Mejorar las instrucciones
+        instructions = """
+        Manten presionado el pequeño botón negro de emparejamiento ubicado al costado del riel de cada Joy-Con
+        hasta que las luces comiencen a destellar.
+
+        En cuanto escuches los destellos: 
+
+        - PRESIONA ZL y ZR al mismo tiempo para usarlo como un único control.
+        - PRESIONA SL y SR en cada joycon para asignarlos como controles individuales.
+        """
+        self.drawButton(header)
+        self.drawText(instructions, (150,150), self.SMALL_FONT, self.LIGHT_PURPLE)
+
+        joyconImg = pygame.image.load(imgPath) 
+        joyconImg= pygame.transform.scale(joyconImg, (self.WIDTH*0.7, self.HEIGHT*0.7))
+
+        imgWidth, imgHeight = joyconImg.get_size()
+        x = (self.WIDTH - imgWidth) // 2
+        y = (self.HEIGHT - imgHeight) // 2
+
+        self.screen.blit(joyconImg, (x, y+100))
+
+
+        pygame.display.flip()
+        return
+    
     def drawMainMenuTest(self):
         running = True
         while running:
-            self.drawMainMenuButtons()
+            self.drawBluetoothPairInstructions("../imgs/pair-joycons.png")
+            time.sleep(10)
+            self.drawBluetoothPairInstructions("../imgs/joy-con.png")
+            time.sleep(10)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
