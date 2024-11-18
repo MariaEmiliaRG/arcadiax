@@ -20,8 +20,11 @@ class Interface:
         self.FONT = pygame.font.Font(None, 50) 
         self.SMALL_FONT = pygame.font.Font(None, 30)
 
-        with open("mainMenuButtons.json", "r") as json_file:
-            self.mainMenuButtons = json.load(json_file)
+        with open("mainMenuButtons.json", "r", encoding='utf-8') as jsonFile:
+            self.mainMenuButtons = json.load(jsonFile)
+
+        with open("controlsMenuButtons.json", "r", encoding='utf-8') as jsonFile:
+            self.controlsMenuButtons = json.load(jsonFile)
 
         self.imgBackground = pygame.image.load("../imgs/arcadiax-background.png")  
 
@@ -88,6 +91,25 @@ class Interface:
         pygame.display.flip()
         return
     
+    def drawControlsMenuMenu(self):
+
+        self.screen.fill(self.DARK_PURPLE) 
+        self.screen.blit(self.imgBackground, (0, 0))
+        for button in self.controlsMenuButtons.values():
+            self.drawButton(button)
+
+        joyconImg = pygame.image.load("../imgs/joy-con.png") 
+        joyconImg = pygame.transform.scale(joyconImg, (self.WIDTH*0.7, self.HEIGHT*0.7))
+
+        imgWidth, imgHeight = joyconImg.get_size()
+        x = (self.WIDTH - imgWidth) // 2
+        y = (self.HEIGHT - imgHeight) // 2
+
+        self.screen.blit(joyconImg, (x, y+100))
+
+        pygame.display.flip()
+        return
+    
     def drawBluetoothPairInstructions(self, imgPath):
         self.screen.fill(self.DARK_PURPLE) 
         self.screen.blit(self.imgBackground, (0, 0))
@@ -131,6 +153,8 @@ class Interface:
     def drawMainMenuTest(self):
         running = True
         while running:
+            self.drawControlsMenuMenu()
+            time.sleep(10)
             self.drawBluetoothPairInstructions("../imgs/pair-joycons.png")
             time.sleep(10)
             self.drawBluetoothPairInstructions("../imgs/joy-con.png")
