@@ -20,13 +20,14 @@ class Arcadiax:
         return 
     
     def connectJoyCons(self):
-        
-        connectJoyConsThread = threading.Thread(target=self.joycons.connectJoyCons())
+        self.joycons.disconnectJoyCons()
+        print("hola1")
+        connectJoyConsThread = threading.Thread(target=self.joycons.connectJoyCons)
         connectJoyConsThread.start()
-        
+        print("hola2")
         while connectJoyConsThread.is_alive():
-            self.interface.drawBluetoothPairInstructions(option = "pairing")
-
+            self.interface.drawBluetoothPairInstructions("pairing")
+            #print("hola3")
         return
 
     
