@@ -165,3 +165,21 @@ class Interface:
                 if event.type == pygame.QUIT:
                     running = False
         pygame.quit()
+        return
+
+    def setConsole(self, console):
+        self.mainMenuButtons["consoleOptions"]["text"] = console
+        return
+    
+    def setGame(self, game):
+        self.mainMenuButtons["gameOptions"]["text"] = game
+        return
+    
+    def setMenuOption(self, option): 
+        for menuOption in self.mainMenuButtons.keys():
+            self.mainMenuButtons[menuOption]["selected"] = 0
+
+        menuOptions = list(self.mainMenuButtons.keys())[:4]
+        self.mainMenuButtons[menuOptions[option]]["selected"] = 0
+        return
+
