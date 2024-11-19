@@ -10,7 +10,8 @@ class JoyCons:
         self.pathScriptGetMac = "../scripts/bluetooth-get-mac-joycons.sh"
         self.joyconsMac = {}
         self.joystick = pygame.joystick.init()
-        self.joycon0 = None
+        self.joyconsNames = ["Nintendo Switch Combined Joy-Cons","Nintendo Switch Right Joy-Con","Nintendo Switch Left Joy-Con"]
+        self.joycon1 = None
 
     def getMacJoyCons(self):
         result = subprocess.run([self.pathScriptGetMac], capture_output=True, text=True, check=True)
@@ -61,6 +62,13 @@ class JoyCons:
     def countJoyCons(self):
         total = self.joystick.get_count() 
         self.changeMap(total)
-        return        
+        
+        return   
+
+    def initJoyCon1(self):
+        self.joycon1 = pygame.joystick.Joystick(0)
+        self.joycon1.init()
+
+        return
 
     
