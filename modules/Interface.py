@@ -110,7 +110,7 @@ class Interface:
         pygame.display.flip()
         return
     
-    def drawBluetoothPairInstructions(self, imgPath):
+    def drawBluetoothPairInstructions(self, option):
         self.screen.fill(self.DARK_PURPLE) 
         self.screen.blit(self.imgBackground, (0, 0))
         header = {
@@ -137,6 +137,8 @@ class Interface:
         self.drawButton(header)
         self.drawText(instructions, (150,150), self.SMALL_FONT, self.LIGHT_PURPLE)
 
+        imgPath = "../imgs/"
+        imgPath += "pair-joycons.png" if option == "pairing" else "joycon.png"
         joyconImg = pygame.image.load(imgPath) 
         joyconImg= pygame.transform.scale(joyconImg, (self.WIDTH*0.7, self.HEIGHT*0.7))
 

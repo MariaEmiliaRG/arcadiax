@@ -1,7 +1,7 @@
 import pexpect
 import time
 
-class bluetooth:
+class Bluetooth:
 
     def __init__(self):
         self.session = pexpect.spawn("bluetoothctl", encoding="utf-8")

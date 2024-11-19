@@ -1,5 +1,5 @@
-import Interface
+import Arcadiax
 
-i = Interface.Interface()
+arcadiax = Arcadiax.Arcadiax()
 
-i.drawMainMenuTest()
+Arcadiax

@@ -1,9 +1,9 @@
 import subprocess
 import json
-import bluetooth  
+import Bluetooth  
 import pygame
 
-class joycons:
+class JoyCons:
 
     def __init__(self):
         self.pathScriptGetMac = "../scripts/bluetooth-get-mac-joycons.sh"
@@ -18,7 +18,7 @@ class joycons:
 
     def connectJoyCons(self):
         self.getMacJoyCons()
-        bt = bluetooth.bluetooth()
+        bt = Bluetooth.bluetooth()
 
         pygame.mixer.init()
         pygame.mixer.music.load('twinkle.mp3')
@@ -33,7 +33,7 @@ class joycons:
     def disconnectJoyCons(self):
         # we remove the macs since every right and left joycon have the same name
         # it's eassier identifying them by the first time instead of trying connection with every single mac address 
-        bt = bluetooth.bluetooth()
+        bt = Bluetooth.bluetooth()
 
         for _ , mac in self.joyconsMac.items(): 
             bt.disconnectDevice(mac)
