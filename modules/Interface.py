@@ -138,7 +138,7 @@ class Interface:
         self.drawText(instructions, (150,150), self.SMALL_FONT, self.LIGHT_PURPLE)
 
         imgPath = "../imgs/"
-        imgPath += "pair-joycons.png" if option == "pairing" else "joycon.png"
+        imgPath += "pair-joycons.png" if option == "pairing" else "joy-con.png"
         joyconImg = pygame.image.load(imgPath) 
         joyconImg= pygame.transform.scale(joyconImg, (self.WIDTH*0.7, self.HEIGHT*0.7))
 
@@ -180,6 +180,6 @@ class Interface:
             self.mainMenuButtons[menuOption]["selected"] = 0
 
         menuOptions = list(self.mainMenuButtons.keys())[:4]
-        self.mainMenuButtons[menuOptions[option]]["selected"] = 0
+        self.mainMenuButtons[menuOptions[option]]["selected"] = 1
         return
 

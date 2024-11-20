@@ -22,23 +22,25 @@ class Arcadiax:
         return 
     
     def start(self):
-        self.connectJoyCons()
-
+#        self.connectJoyCons()
+        self.joycons.initJoyCon1()
         while self.play:
 
-            for event in pygame.event.get():
-                if event.type == pygame.JOYHATMOTION:
-                    value = event.value  
-                    self.changeMainMenuOptions(value)
-                    self.updateMainMenu()
+            pygame.event.pump()
 
-                elif event.type == pygame.JOYBUTTONDOWN:
-                    if event.button == 0: # B Button
-                        self.selectMainMenuOptions()
+            joystickX = self.joycons.joycon1.get_axis(0)
+            joystickY = self.joycons.joycon1.get_axis(1)
+            self.changeMainMenuOptions(joystickX, joystickY)
+            self.updateMainMenu()
 
-            if not self.options["play"]:
+
+            if self.joycons.joycon1.get_button(1): # A Button
+                self.selectMainMenuOptions()
+
+            if not self.mainMenuOptions["play"]:
                 self.interface.drawMainMenu()
                 
+            pygame.time.wait(100)
         self.powerOff()
         return 
     
@@ -55,22 +57,22 @@ class Arcadiax:
             time.sleep(10)
 
         self.interface.drawBluetoothPairInstructions("connect")
-        time.sleep(30)
+        time.sleep(60)
 
         self.joycons.initJoyCon1()
         
-    def changeMainMenuOptions(self, valueJoystick):
-        if valueJoystick == (0, 1): #UP
+    def changeMainMenuOptions(self, joystickX, joystickY):
+        if joystickY < -0.2: #UP
             self.mainMenuOptions["menu"] -= 1
             if self.mainMenuOptions["menu"] < 0:
                 self.mainMenuOptions["menu"] = 3
         
-        elif valueJoystick == (0, -1): #DOWN
+        elif joystickY > 0.2: #DOWN
             self.mainMenuOptions["menu"] += 1
             if self.mainMenuOptions["menu"] > 3:
                 self.mainMenuOptions["menu"] = 0
 
-        elif valueJoystick == (-1, 0): #LEFT
+        elif joystickX < -0.2: #LEFT
             if self.mainMenuOptions["menu"] == 0:
                 self.mainMenuOptions["console"] -= 1
                 if self.mainMenuOptions["console"] < 0:
@@ -84,7 +86,7 @@ class Arcadiax:
                     console = console[self.mainMenuOptions["console"]]
                     self.mainMenuOptions["game"] = len(self.roms[console]) - 1
         
-        elif valueJoystick == (1, 0): #RIGHT
+        elif joystickX > 0.2: #RIGHT
             if self.mainMenuOptions["menu"] == 0:
                 self.mainMenuOptions["console"] += 1
                 if self.mainMenuOptions["console"] > len(self.roms) - 1:
@@ -93,6 +95,8 @@ class Arcadiax:
             
             elif self.mainMenuOptions["menu"] == 1:
                 self.mainMenuOptions["game"] += 1
+                console = list(self.roms.keys())
+                console = console[self.mainMenuOptions["console"]]
                 if self.mainMenuOptions["game"] > len(self.roms[console]) - 1:
                     self.mainMenuOptions["game"] = 0
     
@@ -101,7 +105,7 @@ class Arcadiax:
         console = list(self.roms.keys())
         console = console[self.mainMenuOptions["console"]]
         self.interface.setConsole(console)
-        self.interface.setGame(self.roms[console][self.changeMainMenuOptions["game"]])
+        self.interface.setGame(self.roms[console][self.mainMenuOptions["game"]])
         return
     
     def selectMainMenuOptions(self):
