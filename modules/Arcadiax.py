@@ -5,6 +5,7 @@ import USBManager
 import threading
 import time
 import pygame
+import subprocess
 
 class Arcadiax: 
     def __init__(self):
@@ -18,6 +19,7 @@ class Arcadiax:
             "play" : 0, 
         }
         self.roms = ROMSManager.ROMSManager().getROMSGroupByConsole()
+        self.mednafen = None
         pygame.init()
         return 
     
@@ -36,6 +38,11 @@ class Arcadiax:
 
             if self.joycons.joycon1.get_button(1): # A Button
                 self.selectMainMenuOptions()
+
+            if self.joycons.joycon1.get_button(11): # A Button
+                self.mednafen.kill()
+                self.mainMenuOptions["play"] = 0
+                pygame.display.init()
 
             if not self.mainMenuOptions["play"]:
                 self.interface.drawMainMenu()
@@ -111,6 +118,9 @@ class Arcadiax:
     def selectMainMenuOptions(self):
         if self.mainMenuOptions["menu"] == 2: #PLAY
             print("ejecutar el emulador")
+            pygame.display.quit()
+            self.mainMenuOptions["play"] = 1
+            self.mednafen = subprocess.Popen(["mednafen", "SUPER-MARIO-WORLD.smc"])
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
             print("modificando el ajsute de los controles")
             self.play = False
