@@ -6,6 +6,8 @@ import threading
 import time
 import pygame
 import subprocess
+import os 
+import signal
 
 class Arcadiax: 
     def __init__(self):
@@ -36,13 +38,20 @@ class Arcadiax:
             self.updateMainMenu()
 
 
-            if self.joycons.joycon1.get_button(1): # A Button
+            if self.joycons.joycon1.get_button(17): # A Button
                 self.selectMainMenuOptions()
 
-            if self.joycons.joycon1.get_button(11): # A Button
-                self.mednafen.kill()
-                self.mainMenuOptions["play"] = 0
-                pygame.display.init()
+            for event in pygame.event.get():
+                if event.type == pygame.JOYBUTTONDOWN:
+                    print(event.button)
+
+            if self.mainMenuOptions["play"]:
+                if self.joycons.joycon1.get_button(14): # A Button
+                    os.killpg(os.getpgid(self.mednafen.pid), signal.SIGTERM)
+                    self.mainMenuOptions["play"] = 0
+                    self.interface.removeDisplay()
+                    pygame.time.wait(30)
+                    self.interface.showDisplay()
 
             if not self.mainMenuOptions["play"]:
                 self.interface.drawMainMenu()
@@ -118,9 +127,14 @@ class Arcadiax:
     def selectMainMenuOptions(self):
         if self.mainMenuOptions["menu"] == 2: #PLAY
             print("ejecutar el emulador")
-            pygame.display.quit()
+            self.interface.removeDisplay()
             self.mainMenuOptions["play"] = 1
-            self.mednafen = subprocess.Popen(["mednafen", "SUPER-MARIO-WORLD.smc"])
+            self.mednafen = subprocess.Popen(["mednafen", "../roms/SUPER-MARIO-WORLD.smc"], preexec_fn=os.setsid)
+            print("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") 
+            self.interface.hideDisplay()
+#            time.sleep(5)
+#            pygame.display.quit()
+#            self.mainMenuOptions["play"] = 1
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
             print("modificando el ajsute de los controles")
             self.play = False

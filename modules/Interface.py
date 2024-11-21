@@ -1,10 +1,13 @@
 import pygame
 import json
 import time
+import os
 
 class Interface:
     def __init__(self):
+        os.environ["SDL_VIDEODRIVER"] = "kmsdrm"
         pygame.init()
+        pygame.display.init()
         info = pygame.display.Info()
         self.WIDTH, self.HEIGHT = info.current_w, info.current_h
 
@@ -183,3 +186,16 @@ class Interface:
         self.mainMenuButtons[menuOptions[option]]["selected"] = 1
         return
 
+    def removeDisplay(self):
+        pygame.display.quit()
+
+    def hideDisplay(self):
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
+        pygame.display.init()
+
+    def showDisplay(self):
+#        pygame.quit()
+#        os.environ["SDL_VIDEODRIVER"] = "kmsdrm"
+#        pygame.init()
+        pygame.display.init()
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
