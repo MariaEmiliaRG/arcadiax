@@ -195,7 +195,8 @@ class Interface:
 
     def showDisplay(self):
 #        pygame.quit()
-#        os.environ["SDL_VIDEODRIVER"] = "kmsdrm"
+        time.sleep(2)
+        os.environ["SDL_VIDEODRIVER"] = "kmsdrm"
 #        pygame.init()
         pygame.display.init()
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))

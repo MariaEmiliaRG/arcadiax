@@ -63,7 +63,7 @@ class JoyCons:
         total = self.joystick.get_count() 
         self.changeMap(total)
         
-        return   
+        return total   
 
     def initJoyCon1(self):
         self.joycon1 = pygame.joystick.Joystick(0)
