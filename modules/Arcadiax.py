@@ -14,6 +14,8 @@ class Arcadiax:
         self.interface = Interface.Interface()
         self.joycons = JoyCons.JoyCons()
         self.play = True
+        self.gamesDetectionFlag = True
+        self.gamesDetectionThread = None
         self.mainMenuOptions = { 
             "menu" : 0,
             "console" : 0,
@@ -26,8 +28,12 @@ class Arcadiax:
         return 
     
     def start(self):
-#        self.connectJoyCons()
+#        self.connectJoyCons() TODO Arreglar esto 
         self.joycons.initJoyCon1()
+
+        self.gamesDetectionThread = threading.Thread(target=self.gamesDetection)
+        self.gamesDetectionThread.start()
+
         while self.play:
 
             pygame.event.pump()
@@ -139,8 +145,28 @@ class Arcadiax:
             print("modificando el ajsute de los controles")
             self.play = False
         return 
-     
+    
+    def gamesDetection(self):
+        while self.gamesDetectionFlag: 
+            mountPoint = self.usbDetection.getMountPoint()
+            newGames = []
+            #TODO pausar el emulador 
+            games = self.roms.getROMSFromADir(mountPoint)
+            for game in games:
+                gameAux = self.roms.changeROMName(game)
+                if not self.roms.ROMExist(gameAux):
+                    self.roms.copyROM(mountPoint, game)
+                    newGames.append(game)
+            #TODO checar cómo mostrar la interfaz cuando esté corriendo el emulador
+            self.interface.drawNewGames(newGames)
+
+        return
+
     def powerOff(self): 
         self.play = False 
+
+        self.gamesDetectionFlag = False
+        self.gamesDetectionThread.join()
+
         self.joycons.disconnectJoyCons()
         return

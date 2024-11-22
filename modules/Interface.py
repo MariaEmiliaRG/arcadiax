@@ -143,7 +143,7 @@ class Interface:
         imgPath = "../imgs/"
         imgPath += "pair-joycons.png" if option == "pairing" else "joy-con.png"
         joyconImg = pygame.image.load(imgPath) 
-        joyconImg= pygame.transform.scale(joyconImg, (self.WIDTH*0.7, self.HEIGHT*0.7))
+        joyconImg= pygame.transform.scale(joyconImg, (self.WIDTH*0.6, self.HEIGHT*0.7))
 
         imgWidth, imgHeight = joyconImg.get_size()
         x = (self.WIDTH - imgWidth) // 2
@@ -154,21 +154,34 @@ class Interface:
 
         pygame.display.flip()
         return
-    
-    def drawMainMenuTest(self):
-        running = True
-        while running:
-            self.drawControlsMenuMenu()
-            time.sleep(10)
-            self.drawBluetoothPairInstructions("../imgs/pair-joycons.png")
-            time.sleep(10)
-            self.drawBluetoothPairInstructions("../imgs/joy-con.png")
-            time.sleep(10)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-        pygame.quit()
-        return
+
+    def drawNewGames(self, games): 
+        self.screen.fill(self.DARK_PURPLE) 
+        self.screen.blit(self.imgBackground, (0, 0))
+        header = {
+            "y": 70,
+            "backgroundColor": self.LIGHT_PURPLE,
+            "borderColor": self.LIGHT_PURPLE,
+            "borderWidth": 10,
+            "text": "NUEVOS JUEGOS",
+            "fontSize": "big",
+            "textColor": self.DARK_PURPLE,
+            "selected": 1
+        }
+
+        text = ""
+
+        if len(games) == 0: 
+            text = "No se agregaron nuevos juegos :c"
+        else: 
+            for game in games: 
+                text += game + "\n"
+
+        self.drawButton(header)
+        self.drawText(text, (150,150), self.SMALL_FONT, self.LIGHT_PURPLE)
+
+        pygame.display.flip()
+        return 
 
     def setConsole(self, console):
         self.mainMenuButtons["consoleOptions"]["text"] = console
