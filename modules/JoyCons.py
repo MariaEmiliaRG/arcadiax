@@ -3,15 +3,17 @@ import json
 import Bluetooth  
 import pygame
 import threading
+import time
 
 class JoyCons:
 
     def __init__(self):
         self.pathScriptGetMac = "../scripts/bluetooth-get-mac-joycons.sh"
         self.joyconsMac = {}
-        self.joystick = pygame.joystick.init()
+        self.joystick =  None
         self.joyconsNames = ["Nintendo Switch Combined Joy-Cons","Nintendo Switch Right Joy-Con","Nintendo Switch Left Joy-Con"]
         self.joycon1 = None
+        pygame.init()
 
     def getMacJoyCons(self):
         result = subprocess.run([self.pathScriptGetMac], capture_output=True, text=True, check=True)
@@ -66,6 +68,11 @@ class JoyCons:
         return total   
 
     def initJoyCon1(self):
+        while pygame.joystick.get_count() <= 0:
+            self.joystick = pygame.joystick.init()
+            print(pygame.joystick.get_count())
+            time.sleep(5)
+
         self.joycon1 = pygame.joystick.Joystick(0)
         self.joycon1.init()
 

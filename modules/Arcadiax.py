@@ -29,11 +29,7 @@ class Arcadiax:
     
     def start(self):
 #        self.connectJoyCons()
-#        print(self.joycons.countJoyCons())
-        print("esperando para conectar los joycons")
-#        time.sleep(30)
-#        prinf(self.joycons.countJoyCons())
-        
+
         self.joycons.initJoyCon1()
         while self.play:
 
@@ -85,7 +81,7 @@ class Arcadiax:
             time.sleep(10)
 
         self.interface.drawBluetoothPairInstructions("connect")
-        time.sleep(60)
+        time.sleep(10)
 
         self.joycons.initJoyCon1()
         
