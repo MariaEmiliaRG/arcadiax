@@ -1,5 +1,6 @@
 import pexpect
 import time
+import subprocess
 
 class Bluetooth:
 
@@ -53,6 +54,8 @@ class Bluetooth:
             return 1
         else:
             return 0
+        print("removiendo")
+#        subprocess.run(["bluetoothctl","remove", macAddress], capture_output=True, text=True)
 
     def close(self):
         self.session.sendline("exit")

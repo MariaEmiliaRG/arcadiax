@@ -8,7 +8,7 @@ SCAN_PID=$!
 macJoyConL=""
 macJoyConR=""
 
-while [ -z "$macJoyConR" ] && [ -z "$macJoyConL" ]; do
+while [ -z "$macJoyConR" ] || [ -z "$macJoyConL" ]; do
     macJoyConR=$(bluetoothctl devices | grep "Joy-Con (R)" | awk '{print $2}')
     macJoyConL=$(bluetoothctl devices | grep "Joy-Con (L)" | awk '{print $2}')
     sleep 1

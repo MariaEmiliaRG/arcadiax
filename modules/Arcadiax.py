@@ -8,6 +8,7 @@ import pygame
 import subprocess
 import os 
 import signal
+import uinput
 
 class Arcadiax: 
     def __init__(self):
@@ -24,11 +25,12 @@ class Arcadiax:
         }
         self.roms = ROMSManager.ROMSManager().getROMSGroupByConsole()
         self.mednafen = None
+
         pygame.init()
         return 
     
     def start(self):
-#        self.connectJoyCons() TODO Arreglar esto 
+#        self.connectJoyCons()
         self.joycons.initJoyCon1()
 
         self.gamesDetectionThread = threading.Thread(target=self.gamesDetection)
@@ -38,36 +40,41 @@ class Arcadiax:
 
             pygame.event.pump()
 
-            joystickX = self.joycons.joycon1.get_axis(0)
-            joystickY = self.joycons.joycon1.get_axis(1)
-            self.changeMainMenuOptions(joystickX, joystickY)
-            self.updateMainMenu()
-
-
-            if self.joycons.joycon1.get_button(17): # A Button
-                self.selectMainMenuOptions()
-
             for event in pygame.event.get():
                 if event.type == pygame.JOYBUTTONDOWN:
                     print(event.button)
 
             if self.mainMenuOptions["play"]:
-                if self.joycons.joycon1.get_button(14): # A Button
+                if self.joycons.joycon1.get_button(11): # A Button
                     os.killpg(os.getpgid(self.mednafen.pid), signal.SIGTERM)
                     self.mainMenuOptions["play"] = 0
                     self.interface.removeDisplay()
-                    pygame.time.wait(30)
                     self.interface.showDisplay()
 
+                if self.joycons.joycon1.get_button(4):
+                    print("hola hola")
+                    events = [uinput.KEY_LEFTALT, uinput.KEY_LEFTSHIFT, uinput.KEY_1] 
+                    with uinput.Device(events) as device:
+                        time.sleep(1)
+                        device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_LEFTSHIFT, uinput.KEY_1])
+
             if not self.mainMenuOptions["play"]:
+                joystickX = self.joycons.joycon1.get_axis(0)
+                joystickY = self.joycons.joycon1.get_axis(1)
+                self.changeMainMenuOptions(joystickX, joystickY)
+                self.updateMainMenu()
+
                 self.interface.drawMainMenu()
-                
+
+                if self.joycons.joycon1.get_button(1): # A Button
+                    self.selectMainMenuOptions()
+
             pygame.time.wait(100)
-        self.powerOff()
+
         return 
     
     def connectJoyCons(self):
-        self.joycons.disconnectJoyCons()
+#        self.joycons.disconnectJoyCons()
         
         connectJoyConsThread = threading.Thread(target=self.joycons.connectJoyCons)
         connectJoyConsThread.start()
@@ -79,9 +86,7 @@ class Arcadiax:
             time.sleep(10)
 
         self.interface.drawBluetoothPairInstructions("connect")
-        time.sleep(60)
-
-        self.joycons.initJoyCon1()
+        time.sleep(10)
         
     def changeMainMenuOptions(self, joystickX, joystickY):
         if joystickY < -0.2: #UP
@@ -135,33 +140,17 @@ class Arcadiax:
             print("ejecutar el emulador")
             self.interface.removeDisplay()
             self.mainMenuOptions["play"] = 1
-            self.mednafen = subprocess.Popen(["mednafen", "../roms/SUPER-MARIO-WORLD.smc"], preexec_fn=os.setsid)
+            console = list(self.roms.keys())
+            console = console[self.mainMenuOptions["console"]]
+            game = self.roms[console][self.mainMenuOptions["game"]]
+            self.mednafen = subprocess.Popen(["mednafen", "../roms/"+game], preexec_fn=os.setsid)
             print("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") 
             self.interface.hideDisplay()
-#            time.sleep(5)
-#            pygame.display.quit()
-#            self.mainMenuOptions["play"] = 1
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
             print("modificando el ajsute de los controles")
-            self.play = False
+            self.powerOff()
         return 
-    
-    def gamesDetection(self):
-        while self.gamesDetectionFlag: 
-            mountPoint = self.usbDetection.getMountPoint()
-            newGames = []
-            #TODO pausar el emulador 
-            games = self.roms.getROMSFromADir(mountPoint)
-            for game in games:
-                gameAux = self.roms.changeROMName(game)
-                if not self.roms.ROMExist(gameAux):
-                    self.roms.copyROM(mountPoint, game)
-                    newGames.append(game)
-            #TODO checar cómo mostrar la interfaz cuando esté corriendo el emulador
-            self.interface.drawNewGames(newGames)
-
-        return
-
+     
     def powerOff(self): 
         self.play = False 
 

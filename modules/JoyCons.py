@@ -3,15 +3,17 @@ import json
 import Bluetooth  
 import pygame
 import threading
+import time
 
 class JoyCons:
 
     def __init__(self):
         self.pathScriptGetMac = "../scripts/bluetooth-get-mac-joycons.sh"
         self.joyconsMac = {}
-        self.joystick = pygame.joystick.init()
+        self.joystick =  None
         self.joyconsNames = ["Nintendo Switch Combined Joy-Cons","Nintendo Switch Right Joy-Con","Nintendo Switch Left Joy-Con"]
         self.joycon1 = None
+        pygame.init()
 
     def getMacJoyCons(self):
         result = subprocess.run([self.pathScriptGetMac], capture_output=True, text=True, check=True)
@@ -27,7 +29,6 @@ class JoyCons:
 
         pygame.mixer.init()
         pygame.mixer.music.load('../imgs/twinkle.mp3')
-
 
 #        rJoyConThread = threading.Thread(target=bt.connectDevice, args=(self.joyconsMac["macJoyConR"],))
 #        lJoyConThread = threading.Thread(target=bt.connectDevice, args=(self.joyconsMac["macJoyConL"],))
@@ -47,6 +48,9 @@ class JoyCons:
     def disconnectJoyCons(self):
         # we remove the macs since every right and left joycon have the same name
         # it's eassier identifying them by the first time instead of trying connection with every single mac address 
+        self.getMacJoyCons()
+
+
         bt = Bluetooth.Bluetooth()
 
         for _ , mac in self.joyconsMac.items(): 
@@ -63,9 +67,14 @@ class JoyCons:
         total = self.joystick.get_count() 
         self.changeMap(total)
         
-        return   
+        return total   
 
     def initJoyCon1(self):
+        while pygame.joystick.get_count() <= 0:
+            self.joystick = pygame.joystick.init()
+            print(pygame.joystick.get_count())
+            time.sleep(5)
+
         self.joycon1 = pygame.joystick.Joystick(0)
         self.joycon1.init()
 
