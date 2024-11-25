@@ -30,7 +30,6 @@ class Arcadiax:
         return 
     
     def start(self):
-#        self.connectJoyCons()
         self.joycons.initJoyCon1()
 
         self.gamesDetectionThread = threading.Thread(target=self.gamesDetection)
@@ -45,13 +44,13 @@ class Arcadiax:
                     print(event.button)
 
             if self.mainMenuOptions["play"]:
-                if self.joycons.joycon1.get_button(11): # A Button
+                if self.joycons.joycon1.get_button(11): # home Button
                     os.killpg(os.getpgid(self.mednafen.pid), signal.SIGTERM)
                     self.mainMenuOptions["play"] = 0
                     self.interface.removeDisplay()
                     self.interface.showDisplay()
 
-                if self.joycons.joycon1.get_button(4):
+                if self.joycons.joycon1.get_button(4): # Screenshot button
                     print("hola hola")
                     events = [uinput.KEY_LEFTALT, uinput.KEY_LEFTSHIFT, uinput.KEY_1] 
                     with uinput.Device(events) as device:
@@ -74,7 +73,6 @@ class Arcadiax:
         return 
     
     def connectJoyCons(self):
-#        self.joycons.disconnectJoyCons()
         
         connectJoyConsThread = threading.Thread(target=self.joycons.connectJoyCons)
         connectJoyConsThread.start()
@@ -137,20 +135,44 @@ class Arcadiax:
     
     def selectMainMenuOptions(self):
         if self.mainMenuOptions["menu"] == 2: #PLAY
-            print("ejecutar el emulador")
             self.interface.removeDisplay()
             self.mainMenuOptions["play"] = 1
             console = list(self.roms.keys())
             console = console[self.mainMenuOptions["console"]]
             game = self.roms[console][self.mainMenuOptions["game"]]
             self.mednafen = subprocess.Popen(["mednafen", "../roms/"+game], preexec_fn=os.setsid)
-            print("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") 
             self.interface.hideDisplay()
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
             print("modificando el ajsute de los controles")
             self.powerOff()
         return 
-     
+    
+    def gamesDetection(self):
+        while self.gamesDetectionFlag: 
+            mountPoint = self.usbDetection.getMountPoint()
+            newGames = []
+            
+            games = self.roms.getROMSFromADir(mountPoint)
+            for game in games:
+                gameAux = self.roms.changeROMName(game)
+                if not self.roms.ROMExist(gameAux):
+                    self.roms.copyROM(mountPoint, game)
+                    newGames.append(game)
+
+            if self.mainMenuOptions["play"]:
+                os.killpg(os.getpgid(self.mednafen.pid), signal.SIGSTOP)
+                self.interface.showDisplay()
+
+            self.interface.drawNewGames(newGames)
+            time.sleep(30)
+
+            if self.mainMenuOptions["play"]:
+                os.killpg(os.getpgid(self.mednafen.pid), signal.SIGCONT)
+                self.interface.showDisplay()
+
+            self.roms = ROMSManager.ROMSManager().getROMSGroupByConsole()
+        return
+
     def powerOff(self): 
         self.play = False 
 
