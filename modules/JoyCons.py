@@ -54,7 +54,7 @@ class JoyCons:
         bt = Bluetooth.Bluetooth()
 
         for _ , mac in self.joyconsMac.items(): 
-#            bt.disconnectDevice(mac)
+            bt.disconnectDevice(mac)
             bt.removeDevice(mac)
         
         return 

@@ -65,7 +65,7 @@ class Arcadiax:
                     self.selectMainMenuOptions()
 
             pygame.time.wait(100)
-        self.powerOff()
+
         return 
     
     def connectJoyCons(self):
