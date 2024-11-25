@@ -30,7 +30,6 @@ class JoyCons:
         pygame.mixer.init()
         pygame.mixer.music.load('../imgs/twinkle.mp3')
 
-
 #        rJoyConThread = threading.Thread(target=bt.connectDevice, args=(self.joyconsMac["macJoyConR"],))
 #        lJoyConThread = threading.Thread(target=bt.connectDevice, args=(self.joyconsMac["macJoyConL"],))
 
@@ -49,10 +48,13 @@ class JoyCons:
     def disconnectJoyCons(self):
         # we remove the macs since every right and left joycon have the same name
         # it's eassier identifying them by the first time instead of trying connection with every single mac address 
+        self.getMacJoyCons()
+
+
         bt = Bluetooth.Bluetooth()
 
         for _ , mac in self.joyconsMac.items(): 
-            bt.disconnectDevice(mac)
+#            bt.disconnectDevice(mac)
             bt.removeDevice(mac)
         
         return 

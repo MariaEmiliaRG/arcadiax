@@ -69,7 +69,7 @@ class Arcadiax:
         return 
     
     def connectJoyCons(self):
-        self.joycons.disconnectJoyCons()
+#        self.joycons.disconnectJoyCons()
         
         connectJoyConsThread = threading.Thread(target=self.joycons.connectJoyCons)
         connectJoyConsThread.start()
@@ -82,8 +82,6 @@ class Arcadiax:
 
         self.interface.drawBluetoothPairInstructions("connect")
         time.sleep(10)
-
-        self.joycons.initJoyCon1()
         
     def changeMainMenuOptions(self, joystickX, joystickY):
         if joystickY < -0.2: #UP
@@ -145,7 +143,7 @@ class Arcadiax:
             self.interface.hideDisplay()
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
             print("modificando el ajsute de los controles")
-            self.play = False
+            self.powerOff()
         return 
      
     def powerOff(self): 

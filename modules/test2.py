@@ -4,5 +4,5 @@ import pygame
 arcAux = Arcadiax.Arcadiax()
 arcAux.connectJoyCons()
 pygame.quit()
-#arcadiax = Arcadiax.Arcadiax()
-#arcadiax.start()
+arcadiax = Arcadiax.Arcadiax()
+arcadiax.start()
