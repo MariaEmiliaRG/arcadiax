@@ -156,7 +156,7 @@ class Arcadiax:
             console = list(self.roms.keys())
             console = console[self.mainMenuOptions["console"]]
             game = self.roms[console][self.mainMenuOptions["game"]]
-            self.mednafen = subprocess.Popen(["mednafen", "../roms/"+game], preexec_fn=os.setsid)
+            self.mednafen = subprocess.Popen(["/usr/games/mednafen", "/home/emilia/arcadiax/roms/"+game], preexec_fn=os.setsid)
             self.interface.hideDisplay()
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
             print("modificando el ajsute de los controles")

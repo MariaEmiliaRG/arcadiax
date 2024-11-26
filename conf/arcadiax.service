@@ -1,0 +1,18 @@
+[Unit]
+Description=Arcadiax
+After=default.target
+
+[Service]
+Typer=oneshot
+WorkingDirectory=/home/emilia/arcadiax/modules
+ExecStart=/bin/bash -c '/home/emilia/arcadiax/scripts/arcadiax.sh'
+User=emilia
+Group=emilia
+Environment=PULSE_RUNTIME_PATH=/run/user/1000/pulse/
+#Environment="PULSE_RUNTIME_PATH=/run/user/1000/pulse/"
+Environment="PATH=/usr/games:/usr/bin:/bin:/usr/local/bin"
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
+Environment="TERM=xterm-256color"
+
+[Install]
+WantedBy=default.target
