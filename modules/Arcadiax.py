@@ -68,16 +68,9 @@ class Arcadiax:
                 self.updateMainMenu()
 
                 if self.newGames:
-                #    if self.mainMenuOptions["play"]:
-                #        os.killpg(os.getpgid(self.mednafen.pid), signal.SIGSTOP)
-                #        self.interface.showDisplay()
  
                     self.interface.drawNewGames(self.newUSBGames)
                     time.sleep(30)
-  
-                #    if self.mainMenuOptions["play"]:
-                #        os.killpg(os.getpgid(self.mednafen.pid), signal.SIGCONT)
-                #        self.interface.showDisplay()
 
                     self.newGames = False
                     self.newUSBGames = []
@@ -170,9 +163,9 @@ class Arcadiax:
     def gamesDetection(self):
         while self.gamesDetectionFlag:             
             mountPoint = self.usbDetection.usbDetection()
-
+            print (mountPoint)
             if mountPoint == None:
-                continue
+                break
 
             games = self.romsManager.getROMSFromADir(mountPoint)
             for game in games:
@@ -192,6 +185,6 @@ class Arcadiax:
         self.gamesDetectionFlag = False
         self.gamesDetectionThread.join()
 
-        self.joycons.disconnectJoyCons()
+        #self.joycons.disconnectJoyCons()
         return
 
