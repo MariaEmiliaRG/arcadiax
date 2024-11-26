@@ -34,7 +34,7 @@
         "backgroundColor": [53, 40, 79],
         "borderColor": [216, 187, 255],
         "borderWidth": 10,
-        "text": "CONTROLES",
+        "text": "APAGAR",
         "fontSize": "big",
         "textColor": [216, 187, 255],
         "selected": 0

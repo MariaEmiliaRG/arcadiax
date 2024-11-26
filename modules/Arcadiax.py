@@ -46,6 +46,9 @@ class Arcadiax:
             for event in pygame.event.get():
                 if event.type == pygame.JOYBUTTONDOWN:
                     print(event.button)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_e:
+                        self.exit()
 
             if self.mainMenuOptions["play"]:
                 if self.joycons.joycon1.get_button(11): # home Button
@@ -179,12 +182,15 @@ class Arcadiax:
             self.usbDetection.flag =  True
         return 
 
-    def powerOff(self): 
+    def exit(self): 
         self.play = False 
         self.usbDetection.flag = False
         self.gamesDetectionFlag = False
         self.gamesDetectionThread.join()
-
         self.joycons.disconnectJoyCons()
         return
+
+    def powerOff(self):
+        self.exit()
+        subprocess.run(['sudo', 'shutdown', 'now'])
 
