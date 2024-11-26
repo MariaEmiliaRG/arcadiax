@@ -31,6 +31,7 @@ class USBManager:
         return out
     
     def usbDetection(self):
+        mountPoint = None
         while self.flag:
             action, device = self.monitor.receive_device()
             if action != "add":

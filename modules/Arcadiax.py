@@ -14,7 +14,10 @@ class Arcadiax:
     def __init__(self):
         self.interface = Interface.Interface()
         self.joycons = JoyCons.JoyCons()
+        self.usbDetection = USBManager.USBManager()
         self.play = True
+        self.newGames = False
+        self.newUSBGames = []
         self.gamesDetectionFlag = True
         self.gamesDetectionThread = None
         self.mainMenuOptions = { 
@@ -23,7 +26,8 @@ class Arcadiax:
             "game" : 0,
             "play" : 0, 
         }
-        self.roms = ROMSManager.ROMSManager().getROMSGroupByConsole()
+        self.romsManager = ROMSManager.ROMSManager()
+        self.roms = self.romsManager.getROMSGroupByConsole()
         self.mednafen = None
 
         pygame.init()
@@ -63,10 +67,26 @@ class Arcadiax:
                 self.changeMainMenuOptions(joystickX, joystickY)
                 self.updateMainMenu()
 
+                if self.newGames:
+                #    if self.mainMenuOptions["play"]:
+                #        os.killpg(os.getpgid(self.mednafen.pid), signal.SIGSTOP)
+                #        self.interface.showDisplay()
+ 
+                    self.interface.drawNewGames(self.newUSBGames)
+                    time.sleep(30)
+  
+                #    if self.mainMenuOptions["play"]:
+                #        os.killpg(os.getpgid(self.mednafen.pid), signal.SIGCONT)
+                #        self.interface.showDisplay()
+
+                    self.newGames = False
+                    self.newUSBGames = []
+
                 self.interface.drawMainMenu()
 
                 if self.joycons.joycon1.get_button(1): # A Button
                     self.selectMainMenuOptions()
+
 
             pygame.time.wait(100)
 
@@ -148,36 +168,30 @@ class Arcadiax:
         return 
     
     def gamesDetection(self):
-        while self.gamesDetectionFlag: 
-            mountPoint = self.usbDetection.getMountPoint()
-            newGames = []
-            
-            games = self.roms.getROMSFromADir(mountPoint)
+        while self.gamesDetectionFlag:             
+            mountPoint = self.usbDetection.usbDetection()
+
+            if mountPoint == None:
+                continue
+
+            games = self.romsManager.getROMSFromADir(mountPoint)
             for game in games:
-                gameAux = self.roms.changeROMName(game)
-                if not self.roms.ROMExist(gameAux):
-                    self.roms.copyROM(mountPoint, game)
-                    newGames.append(game)
+                gameAux = self.romsManager.changeROMName(game)
+                if not self.romsManager.ROMExist(gameAux):
+                    self.romsManager.copyROM(mountPoint, game)
+                    self.newUSBGames.append(game)
 
-            if self.mainMenuOptions["play"]:
-                os.killpg(os.getpgid(self.mednafen.pid), signal.SIGSTOP)
-                self.interface.showDisplay()
-
-            self.interface.drawNewGames(newGames)
-            time.sleep(30)
-
-            if self.mainMenuOptions["play"]:
-                os.killpg(os.getpgid(self.mednafen.pid), signal.SIGCONT)
-                self.interface.showDisplay()
-
+            self.newGames = True
             self.roms = ROMSManager.ROMSManager().getROMSGroupByConsole()
-        return
+            self.usbDetection.flag =  True
+        return 
 
     def powerOff(self): 
         self.play = False 
-
+        self.usbDetection.flag = False
         self.gamesDetectionFlag = False
         self.gamesDetectionThread.join()
 
         self.joycons.disconnectJoyCons()
         return
+
