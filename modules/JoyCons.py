@@ -19,7 +19,7 @@ class JoyCons:
         result = subprocess.run([self.pathScriptGetMac], capture_output=True, text=True, check=True)
         self.joyconsMac = json.loads(result.stdout)
 
-        print(self.joyconsMac)
+        #print(self.joyconsMac)
 
         return
 
@@ -70,11 +70,13 @@ class JoyCons:
         return total   
 
     def initJoyCon1(self):
-        while pygame.joystick.get_count() <= 0:
+        num = 0
+
+        while pygame.joystick.get_count() <= 0 and num < 10:
             self.joystick = pygame.joystick.init()
             print(pygame.joystick.get_count())
             time.sleep(5)
-
+            num += 1
         self.joycon1 = pygame.joystick.Joystick(0)
         self.joycon1.init()
 

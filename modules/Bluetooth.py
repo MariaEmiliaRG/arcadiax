@@ -54,7 +54,7 @@ class Bluetooth:
             return 1
         else:
             return 0
-        print("removiendo")
+        #print("removiendo")
 #        subprocess.run(["bluetoothctl","remove", macAddress], capture_output=True, text=True)
 
     def close(self):

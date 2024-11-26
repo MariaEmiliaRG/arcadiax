@@ -44,8 +44,8 @@ class Arcadiax:
             pygame.event.pump()
 
             for event in pygame.event.get():
-                if event.type == pygame.JOYBUTTONDOWN:
-                    print(event.button)
+#                if event.type == pygame.JOYBUTTONDOWN:
+                    #print(event.button)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_e:
                         self.exit()
@@ -58,7 +58,7 @@ class Arcadiax:
                     self.interface.showDisplay()
 
                 if self.joycons.joycon1.get_button(4): # Screenshot button
-                    print("hola hola")
+                    #print("hola hola")
                     events = [uinput.KEY_LEFTALT, uinput.KEY_LEFTSHIFT, uinput.KEY_1] 
                     with uinput.Device(events) as device:
                         time.sleep(1)
@@ -159,7 +159,7 @@ class Arcadiax:
             self.mednafen = subprocess.Popen(["/usr/games/mednafen", "/home/emilia/arcadiax/roms/"+game], preexec_fn=os.setsid)
             self.interface.hideDisplay()
         elif self.mainMenuOptions["menu"] == 3: #CONTROLS
-            print("modificando el ajsute de los controles")
+            #print("modificando el ajsute de los controles")
             self.powerOff()
         return 
     
@@ -188,6 +188,7 @@ class Arcadiax:
         self.gamesDetectionFlag = False
         self.gamesDetectionThread.join()
         self.joycons.disconnectJoyCons()
+        subprocess.run(["clear"])
         return
 
     def powerOff(self):
