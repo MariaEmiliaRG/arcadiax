@@ -70,7 +70,7 @@ class Arcadiax:
                 if self.newGames:
  
                     self.interface.drawNewGames(self.newUSBGames)
-                    time.sleep(30)
+                    time.sleep(10)
 
                     self.newGames = False
                     self.newUSBGames = []
@@ -163,7 +163,7 @@ class Arcadiax:
     def gamesDetection(self):
         while self.gamesDetectionFlag:             
             mountPoint = self.usbDetection.usbDetection()
-            print (mountPoint)
+        
             if mountPoint == None:
                 break
 
@@ -185,6 +185,6 @@ class Arcadiax:
         self.gamesDetectionFlag = False
         self.gamesDetectionThread.join()
 
-        #self.joycons.disconnectJoyCons()
+        self.joycons.disconnectJoyCons()
         return
 

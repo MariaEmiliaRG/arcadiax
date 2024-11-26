@@ -32,13 +32,22 @@ class USBManager:
     
     def usbDetection(self):
         mountPoint = None
-        while self.flag:
-            action, device = self.monitor.receive_device()
-            if action != "add":
-                continue
 
-            devicePath = "/dev/" + device.sys_name
-            self.autoMount(devicePath)
-            mountPoint = self.getMountPoint(devicePath)
-            self.flag = False
+        while self.flag:
+
+            device = self.monitor.poll(timeout=1)
+            if device is None:
+                continue
+            else:
+                action = device.action
+
+                if action != "add":
+                    print(self.flag)
+                    continue
+
+                devicePath = "/dev/" + device.sys_name
+                self.autoMount(devicePath)
+                mountPoint = self.getMountPoint(devicePath)
+                self.flag = False
+
         return mountPoint
