@@ -18,6 +18,7 @@ Arcadiax es un proyecto diseñado para transformar una Raspberry Pi 4 en una con
 - El emulador [mednafen](https://mednafen.github.io/)
 
 ## 🌙 Instalación 
+En la terminal colocar las siguientes instrucciones: 
 ```
 git clone https://github.com/MariaEmiliaRG/arcadiax.git
 sudo apt install python3-pygame python3-pexpect python3-uinput python3-pyudev
