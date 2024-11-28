@@ -24,5 +24,6 @@ sudo apt install python3-pygame python3-pexpect python3-uinput python3-pyudev
 cd arcadiax/modules
 python3 main.py
 ```
-
+### 📼 Video demostrativo
+[https://youtu.be/q7IK8L_DlJs](https://youtu.be/q7IK8L_DlJs)
   
