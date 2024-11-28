@@ -1,4 +1,9 @@
 #!/bin/bash
+# Author: Maria Emilia Ramirez Gomez
+# Year: 2024
+# License: MIT License
+#
+# This code is released under the MIT License. See the LICENSE file for more details.
 
 bluetoothctl power on > /dev/null &
 bluetoothctl scan on > /dev/null &
